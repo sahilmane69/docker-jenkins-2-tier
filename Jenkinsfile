@@ -10,7 +10,13 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh "docker run --rm -v $(pwd):/app -w /app python:3.12-slim sh -c \"pip install -r requirements.txt && pytest tests/ -v\""
+                sh '''
+                    docker run --rm \
+                    -v $(pwd):/app \
+                    -w /app \
+                    python:3.12-slim \
+                    sh -c "pip install -r requirements.txt && pytest tests/ -v"
+                '''
             }
         }
 
@@ -27,7 +33,7 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline succeeded! Image pushed to Docker Hub.'
+            echo 'Pipeline succeeded!'
         }
         failure {
             echo 'Pipeline failed!'
